@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مفاجأة خاصة جداً 🐉✨</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #00d2ff;
+            --secondary: #3a7bd5;
+            --bg-dark: #070b19;
+            --card-bg: rgba(13, 22, 45, 0.92);
+            --text-light: #e0f7fa;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Cairo', sans-serif; }
+
+        body {
+            background: linear-gradient(135deg, #050814, #0f1b38);
+            color: var(--text-light);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        .container { width: 90%; max-width: 650px; z-index: 10; text-align: center; position: relative; padding: 20px; }
+        .card { background: var(--card-bg); border: 1px solid rgba(0, 210, 255, 0.25); border-radius: 24px; padding: 25px; box-shadow: 0 20px 50px rgba(0,0,0,0.85); margin: 15px 0; }
+        .hidden { display: none !important; }
+
+        .btn {
+            background: linear-gradient(135deg, var(--secondary), var(--primary));
+            color: #050814; border: none; padding: 12px 30px; border-radius: 50px; font-size: 1.1rem; font-weight: 800; cursor: pointer;
+            box-shadow: 0 8px 20px rgba(0, 210, 255, 0.3); transition: all 0.3s ease; margin-top: 15px; display: inline-block;
+        }
+        .btn:hover { transform: translateY(-3px) scale(1.03); box-shadow: 0 12px 25px rgba(0, 210, 255, 0.5); }
+
+        input {
+            width: 100%; padding: 14px; margin: 12px 0; border-radius: 14px; border: 1px solid rgba(0,210,255,0.3); background: rgba(0,0,0,0.6); color: #fff; font-size: 1.1rem; text-align: center;
+        }
+
+        #matrixCanvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; opacity: 0.45; }
+        .cinematic-scene { position: relative; min-height: 320px; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 2; }
+
+        .welcome-title {
+            font-size: 1.8rem; color: var(--primary); margin-bottom: 15px; font-weight: 800; text-shadow: 0 0 12px rgba(0,210,255,0.8);
+        }
+
+        .message-img-container {
+            width: 100%; height: 230px; border-radius: 18px; overflow: hidden; margin-bottom: 15px; border: 2px solid var(--primary); box-shadow: 0 0 20px rgba(0,210,255,0.3); background: #000; display: flex; justify-content: center; align-items: center;
+        }
+        .message-img-container img {
+            max-width: 100%; max-height: 100%; object-fit: contain;
+        }
+
+        .message-box {
+            font-size: 1.1rem; line-height: 1.8; padding: 10px; color: #e0f7fa; text-shadow: 0 0 5px rgba(0,210,255,0.2);
+            max-height: 150px; overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <!-- الخطوة 1: كتابة الاسم -->
+        <div id="stepName" class="card">
+            <h2>✨ مفاجأة خاصة جداً 🐉</h2>
+            <p style="margin: 15px 0; font-size: 1rem;">اكتبي اسمك هنا علشان تبدأ المفاجأة:</p>
+            <input type="text" id="userNameInput" placeholder="اكتبي الاسم هنا (مثال: جنى)...">
+            <button class="btn" onclick="startSurprise()">ابدأ المفاجأة 🐉</button>
+        </div>
+
+        <!-- الخطوة 2: العرض السينمائي (أكواد لمدة 10 ثوانٍ) -->
+        <div id="stepCinematic" class="card hidden" style="position: relative; overflow: hidden;">
+            <canvas id="matrixCanvas"></canvas>
+            <div class="cinematic-scene">
+                <div id="greetingText" class="welcome-title">جاري تجهيز المفاجأة... 🐉✨</div>
+            </div>
+            <button id="btnAfterCinematic" class="btn hidden" onclick="showRandomMessage()">عرض الرسالة الخاصة ✨</button>
+        </div>
+
+        <!-- الخطوة 3: عرض الرسالة مع صور أبوسن -->
+        <div id="stepMessage" class="card hidden">
+            <h2 id="msgTitle" style="color: var(--primary); margin-bottom: 15px; text-shadow: 0 0 10px rgba(0,210,255,0.5);"></h2>
+            
+            <div class="message-img-container">
+                <img id="msgImage" src="" alt="Toothless">
+            </div>
+
+            <div id="randomMsgContent" class="message-box"></div>
+            <button class="btn" onclick="showRandomMessage()">رسالة تحفيزية أخرى مع أبوسن 🐉🎲</button>
+        </div>
+
+    </div>
+
+    <script>
+        let currentUserName = "";
+
+        // 50 رسالة تحفيزية مختلفة ومميزة مع صور أبوسن المتحركة
+        const secretMessages = [
+            { text: "عايزك دايماً تفضلي متأكدة أن قوتك وضحكتك هما أجمل حاجة في الدنيا، مهما قابلتي صعاب أنا دايماً جنبك ومؤمن بكي وبأحلامك يا بطلتي!", img: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcjFuc2V3anNrd2k2Z2x0MDBxajgzOWl3Y3ZocXptMW8xdXh5cWpmYyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/VBi0qdmGH0rO8/giphy.gif" },
+            { text: "مهما كانت الظروف صعبة، فكري دايماً إنك قادرة تعدي أي حاجة بذكائك وطيبة روحك الجميلة. ربنا ما يحرمنا من وجودك المنور حياتنا.", img: "https://media.giphy.com/media/3ov9k01Y5IKizNmC7S/giphy.gif" },
+            { text: "وجودك بيخلي للحياة طعم تاني خالص. استمري في التميز والنجاح، وأنا دايماً فخور بكي وبكل خطوة بتخطوها.", img: "https://media.giphy.com/media/5xtDarmwsuR9sDRObyU/giphy.gif" },
+            { text: "رسالة لكي لوحدك: أنتِ إنسانة مميزة جداً، قلبي بيطمئن بكلمتك، وضحكتك بتغير مزاجي كله. خليكي دايماً متفائلة ومشرقة!", img: "https://media.giphy.com/media/13mPE0os7OBQN2/giphy.gif" },
+            { text: "لا تتوقفي عن المحاولة، أنتِ تملكين من القوة والشغف ما يكفي لتحقيق أكبر أحلامك. افتخري بنفسك دايماً!", img: "https://media.giphy.com/media/26BRv0ThflsHCqDrG/giphy.gif" },
+            { text: "ابتسامتك هي النور الذي يضيء أوقاتي المظلمة. ثقي بنفسك وبقدراتك دائماً لأنك تستحقين الأفضل دائماً.", img: "https://media.giphy.com/media/107l_86KlxciVG/giphy.gif" },
+            { text: "أنتِ قادرة على تحويل أي تحدٍ إلى نجاح باهر بفضل إصرارك وعزيمتك التي لا تلين.", img: "https://media.giphy.com/media/14wvvT4MkJ1I1a/giphy.gif" },
+            { text: "كل خطوة صغيرة تخطينها اليوم هي خطوة كبيرة نحو مستقبلك المشرق الذي تنتظرينه.", img: "https://media.giphy.com/media/3oKIPnAiaMCws8nOsE/giphy.gif" },
+            { text: "يا أجمل من دخل حياتي، أتمنى لكِ يوماً مليئاً بالنجاح والتوفيق واللحظات السعيدة!", img: "https://media.giphy.com/media/10HvVHE5p0n5X2/giphy.gif" },
+            { text: "لا تقارني نفسك بأحد، فأنتِ فريدة من نوعك ولا يوجد في هذا العالم من يشبه روعتك ونقاء قلبك.", img: "https://media.giphy.com/media/3o7TKSjRrfIPjeiOkM/giphy.gif" },
+            { text: "تذكري دائماً أن روحك النقية وطيبتك هما سر جاذبيتك وقوتك الحقيقية. لا تتغيري أبداً!", img: "https://media.giphy.com/media/l4FGuhL4U2WyjdkaY/giphy.gif" },
+            { text: "في كل مرة أراكِ فيها تحاولين وتنجحين، يزداد فخري بكِ. أنتِ بحق بطلة قصتك الخاصة.", img: "https://media.giphy.com/media/xT9IgusjhuL0y8jjHO/giphy.gif" },
+            { text: "النجاح يليق بكِ جداً، فلا ترضي بأقل مما تستحقين. واصلي الطموح والسعي وستصلين قريباً لكل ما تطمحين إليه.", img: "https://media.giphy.com/media/3o7abKhOpu0NwenH3O/giphy.gif" },
+            { text: "عندما تصبح الأيام ثقيلة، تذكري أن لديكِ من يحبك ويدعمك بكل جوارحه لتبقي دائماً في القمة.", img: "https://media.giphy.com/media/3o7btPCcdNniyf0ArS/giphy.gif" },
+            { text: "أنتِ أصل وفصل للجمال والذكاء معاً. خلي ثقتك بنفسك عالية زي السماء ولا تهتزي لأي شيء.", img: "https://media.giphy.com/media/3o7qDEq2bMbcbPRQ2c/giphy.gif" },
+            { text: "كل يوم هو فرصة جديدة لتكوني أفضل، وأنا واثق أنكِ تصنعين العجائب ببساطتك وذكائك العبقري.", img: "https://media.giphy.com/media/l0HlRnAWXxn0MhOBK/giphy.gif" },
+            { text: "لا تدعي الخوف يمنعكِ من التجربة، فأنتِ تحملين في داخلك شجاعة تصنع المعجزات وتفتح الأبواب المغلقة.", img: "https://media.giphy.com/media/3ohs7JG6nzYnEDFPOM/giphy.gif" },
+            { text: "أنتِ النجمة التي تضيء كل مكان تحلين فيه، اسطعي ولا تدعي أحداً يطفئ بريقك المميز.", img: "https://media.giphy.com/media/26AHONQ79FdWZhAI0/giphy.gif" },
+            { text: "مهما كانت المسافات أو الظروف، يبقى وجودك هو الشيء الأجمل الذي أشكُر الله عليه كل يوم.", img: "https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif" },
+            { text: "ثقتك بنفسك هي أول طريق للوصول لكل ما تحلمين به، وأنا دايماً في ضهرك ومش هسيبك أبداً.", img: "https://media.giphy.com/media/10JhviFuU2gWIw/giphy.gif" },
+            { text: "أنتِ أمل يتحقق، وحلم يعيش، وشخص لا يتكرر في هذا العالم مرتين. دمتِ لي شيئاً جميلاً لا ينتهي.", img: "https://media.giphy.com/media/d2W7eZX5z62ziqdi/giphy.gif" },
+            { text: "كل صباح يبدأ برؤية ابتسامتك أو سماع صوتك هو صباح مليء بالخير والبركة والجمال.", img: "https://media.giphy.com/media/xT5LMGfHz0hvDUyb1C/giphy.gif" },
+            { text: "استمري في التعلم والتطور، فأنتِ تمتلكين عقلاً منيرأ وقلباً يفيض بالحب والإنسانية.", img: "https://media.giphy.com/media/l0HlP2ms0eUc5nsFG/giphy.gif" },
+            { text: "مهما بدت الطرق متعبة، تذكري اللحظة التي ستصلين فيها لقمة نجاحك واصمدي كعادتك بقوة وشجاعة.", img: "https://media.giphy.com/media/3oEjI1erPMTMBFmNHi/giphy.gif" },
+            { text: "أنتِ مصدر إلهام وشغف لكل من حولك، ووجودك يبعث على الراحة والاطمئنان دائماً في كل الأوقات.", img: "https://media.giphy.com/media/3o7aTskHEU7CQAXE8w/giphy.gif" },
+            { text: "عيناكِ تحملان حكايات من الأمل والجمال، فلا تدعي الحزن يجد لهما طريقاً أبداً.", img: "https://media.giphy.com/media/3o6ZtaO9BZHcOjmErm/giphy.gif" },
+            { text: "أنتِ أقوى من كل العواصف التي مرت بكِ، وستظلين دايماً القوية الشجاعة التي تتجاوز الصعاب بكل إصرار.", img: "https://media.giphy.com/media/3o7buik7UsjGcrDO9a/giphy.gif" },
+            { text: "اعلمي أن كل حلم يتسلل إلى قلبكِ هو حلم من حقكِ أن تحاربين لأجله وستحققينه قريباً جداً.", img: "https://media.giphy.com/media/26u4v3588M5fwUSty/giphy.gif" },
+            { text: "كوني كما أنتِ، بعفويتك وضحكتك وقوتك، فهكذا تكونين الأجمل دائماً في عيون الجميع.", img: "https://media.giphy.com/media/l0HlP2ms0eUc5nsFG/giphy.gif" },
+            { text: "لا تنظري للخلف أبداً، فالمستقبل يحمل لكِ من المفاجآت السعيدة ما يفوق خيالك الواسع.", img: "https://media.giphy.com/media/3ohs7JG6nzYnEDFPOM/giphy.gif" },
+            { text: "أنتِ الجمال في أنقى صوره، والذكاء في أبهى مظاهره. دمتِ ممتازة ومبهرة في كل ما تفعلينه!", img: "https://media.giphy.com/media/xT5LMGfHz0hvDUyb1C/giphy.gif" },
+            { text: "أنا هنا دائماً لأذكركِ بمدى روعتك وقوتك عندما تنسين ذلك تحت ضغط ومتاعب الحياة اليومية.", img: "https://media.giphy.com/media/d2W7eZX5z62ziqdi/giphy.gif" },
+            { text: "اجعلي حلمك كبيراً وواصلي المسير، فالقمة لا تنتظر إلا المتميزين والشجعان أمثالك.", img: "https://media.giphy.com/media/l0HlRnAWXxn0MhOBK/giphy.gif" },
+            { text: "تأكدي أنكِ تتركين أثراً طيباً وجميلاً في كل مكان تمشين فيه بفضل روحك الطيبة ونقاء سريرتك.", img: "https://media.giphy.com/media/3o7TKSjRrfIPjeiOkM/giphy.gif" },
+            { text: "أنتِ كالبدر في ليلة تمامه، تضيئين عتمة الأيام وتنشرين الدفء والسلام لمن حولك.", img: "https://media.giphy.com/media/l4FGuhL4U2WyjdkaY/giphy.gif" },
+            { text: "لا تدعي الأيام الباهتة تؤثر على لون روحك المشرق والمبهج الذي ينشر السعادة أينما حللتِ.", img: "https://media.giphy.com/media/3o7abKhOpu0NwenH3O/giphy.gif" },
+            { text: "واصلي العطاء والسعي، فالدنيا تصبح أجمل بكثير بوجود أشخاص أنقياء ومحبي للخير مثلك فيها.", img: "https://media.giphy.com/media/3o7btPCcdNniyf0ArS/giphy.gif" },
+            { text: "أنتِ تستحقين كل السعادة والنجاح والراحة في هذا العالم، ولن أرضى لكِ بأقل من القمة أبداً.", img: "https://media.giphy.com/media/3o7qDEq2bMbcbPRQ2c/giphy.gif" },
+            { text: "مهما كانت الصعاب، فابتسامتكِ الساحرة قادرة على إذابة كل القسوة وجعل كل شيء جميل وممكن.", img: "https://media.giphy.com/media/5xtDarmwsuR9sDRObyU/giphy.gif" },
+            { text: "كل يوم تثبتين لي أنكِ إنسانة استثنائية وعظيمة بكل ما تحمل الكلمة من معنى وصفاء.", img: "https://media.giphy.com/media/3ov9k01Y5IKizNmC7S/giphy.gif" },
+            { text: "طموحكِ هو وقود نجاحك الدائم، حافظي عليه ولا تسمحي لأحد أن يثبط عزيمتك أو يقلل من حماسك.", img: "https://media.giphy.com/media/13mPE0os7OBQN2/giphy.gif" },
+            { text: "أنتِ قصيدة من الأمل، ولحن من السعادة، وشخص يصعب أن نجد له مثيلاً في هذا الزمن.", img: "https://media.giphy.com/media/26BRv0ThflsHCqDrG/giphy.gif" },
+            { text: "تذكري أن الله لا يضعكِ في موقف إلا وهو يعلم أنكِ قادرة على تجاوزه بكل قوة وثبات وجدارة.", img: "https://media.giphy.com/media/107l_86KlxciVG/giphy.gif" },
+            { text: "كوني دايماً فخورة بكل الإنجازات التي حققتها حتى الآن، وما زال المستقبل يحمل لكِ الأفضل بكثير!", img: "https://media.giphy.com/media/14wvvT4MkJ1I1a/giphy.gif" },
+            { text: "أنتِ رزق ونعمة كبيرة في حياتي، وأتمنى لكِ نجاحاً لا ينتهي وسعادة أبدية لا تزول.", img: "https://media.giphy.com/media/3oKIPnAiaMCws8nOsE/giphy.gif" },
+            { text: "مهما حدث، ابقي شامخة، واثقة، ومبتسمة، فأنتِ عنوان الجمال والقوة في آن واحد.", img: "https://media.giphy.com/media/10HvVHE5p0n5X2/giphy.gif" },
+            { text: "يا أجمل من دخل حياتي، أتمنى لكِ دائماً يوماً مليئاً بالنجاح والتوفيق واللحظات السعيدة التي لا تعوض.", img: "https://media.giphy.com/media/3o7TKSjRrfIPjeiOkM/giphy.gif" },
+            { text: "أنتِ قادرة على بناء عالمك الخاص المليء بالنجاحات والأحلام المحققة بثقتك وإرادتك القوية.", img: "https://media.giphy.com/media/l4FGuhL4U2WyjdkaY/giphy.gif" },
+            { text: "لا توجد عقبة تستطيع أن تقف في طريق طموحك، فأنتم تولدون لتصنعوا المستحيل يا بطلتي.", img: "https://media.giphy.com/media/xT9IgusjhuL0y8jjHO/giphy.gif" },
+            { text: "تأكدي أن كل تعب وجهد تبذلينه اليوم سيتحول قريباً إلى فخر كبير يملأ حياتك بالسرور والرضا.", img: "https://media.giphy.com/media/3o7abKhOpu0NwenH3O/giphy.gif" }
+        ];
+
+        function startSurprise() {
+            const inputVal = document.getElementById('userNameInput').value.trim();
+            if (!inputVal) {
+                alert("من فضلك اكتبي الاسم الأول ❤️");
+                return;
+            }
+            currentUserName = inputVal;
+            document.getElementById('greetingText').innerText = `أهلاً بكي يا ${currentUserName}.. جاري تشغيل العرض السينمائي 🐉`;
+            
+            showOnly('stepCinematic');
+            startCinematicSequence();
+        }
+
+        function showOnly(id) {
+            document.querySelectorAll('.container .card').forEach(c => c.classList.add('hidden'));
+            document.getElementById(id).classList.remove('hidden');
+        }
+
+        function startCinematicSequence() {
+            const canvas = document.getElementById('matrixCanvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = canvas.parentElement.offsetWidth;
+            canvas.height = canvas.parentElement.offsetHeight;
+
+            const chars = "01 TOOTHLESS NIGHT FURY DRAGON " + currentUserName;
+            const fontSize = 14;
+            const columns = canvas.width / fontSize;
+            const drops = Array(Math.floor(columns)).fill(1);
+
+            let matrixInterval = setInterval(() => {
+                ctx.fillStyle = 'rgba(7, 11, 25, 0.12)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = '#00d2ff';
+                ctx.font = fontSize + 'px monospace';
+
+                for (let i = 0; i < drops.length; i++) {
+                    let text = chars.charAt(Math.floor(Math.random() * chars.length));
+                    ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                    if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
+                    drops[i]++;
+                }
+            }, 45);
+
+            // 10 ثوانٍ كاملة للأكواد
+            setTimeout(() => {
+                clearInterval(matrixInterval);
+                document.getElementById('greetingText').innerText = `جاهزة يا ${currentUserName}؟ ✨`;
+                document.getElementById('btnAfterCinematic').classList.remove('hidden');
+            }, 10000);
+        }
+
+        function showRandomMessage() {
+            showOnly('stepMessage');
+            document.getElementById('msgTitle').innerText = `إلى الغالية: ${currentUserName} 🐉✨`;
+            
+            const randomIndex = Math.floor(Math.random() * secretMessages.length);
+            const chosenObj = secretMessages[randomIndex];
+
+            document.getElementById('msgImage').src = chosenObj.img;
+
+            typeEffect('randomMsgContent', chosenObj.text);
+        }
+
+        function typeEffect(elementId, text) {
+            const el = document.getElementById(elementId);
+            el.innerHTML = "";
+            let i = 0;
+            const timer = setInterval(() => {
+                if (i < text.length) {
+                    el.innerHTML += text.charAt(i);
+                    i++;
+                } else {
+                    clearInterval(timer);
+                }
+            }, 25);
+        }
+    </script>
+</body>
+</html>
