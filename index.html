@@ -80,10 +80,11 @@
             <div class="cinematic-scene">
                 <div id="greetingText" class="welcome-title">جاري تجهيز المفاجأة... 🐉✨</div>
             </div>
+            <!-- تم إصلاح وتفعيل هذا الزر -->
             <button id="btnAfterCinematic" class="btn hidden" onclick="showRandomMessage()">عرض الرسالة الخاصة ✨</button>
         </div>
 
-        <!-- الخطوة 3: عرض الرسالة مع صور أبوسن -->
+        <!-- الخطوة 3: عرض الرسالة مع صور أبوسن الحقيقية -->
         <div id="stepMessage" class="card hidden">
             <h2 id="msgTitle" style="color: var(--primary); margin-bottom: 15px; text-shadow: 0 0 10px rgba(0,210,255,0.5);"></h2>
             
@@ -100,58 +101,58 @@
     <script>
         let currentUserName = "";
 
-        // 50 رسالة تحفيزية مختلفة ومميزة مع صور أبوسن المتحركة
+        // 50 رسالة تحفيزية مختلفة ومميزة مع صورك المباشرة
         const secretMessages = [
-            { text: "عايزك دايماً تفضلي متأكدة أن قوتك وضحكتك هما أجمل حاجة في الدنيا، مهما قابلتي صعاب أنا دايماً جنبك ومؤمن بكي وبأحلامك يا بطلتي!", img: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcjFuc2V3anNrd2k2Z2x0MDBxajgzOWl3Y3ZocXptMW8xdXh5cWpmYyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/VBi0qdmGH0rO8/giphy.gif" },
-            { text: "مهما كانت الظروف صعبة، فكري دايماً إنك قادرة تعدي أي حاجة بذكائك وطيبة روحك الجميلة. ربنا ما يحرمنا من وجودك المنور حياتنا.", img: "https://media.giphy.com/media/3ov9k01Y5IKizNmC7S/giphy.gif" },
-            { text: "وجودك بيخلي للحياة طعم تاني خالص. استمري في التميز والنجاح، وأنا دايماً فخور بكي وبكل خطوة بتخطوها.", img: "https://media.giphy.com/media/5xtDarmwsuR9sDRObyU/giphy.gif" },
-            { text: "رسالة لكي لوحدك: أنتِ إنسانة مميزة جداً، قلبي بيطمئن بكلمتك، وضحكتك بتغير مزاجي كله. خليكي دايماً متفائلة ومشرقة!", img: "https://media.giphy.com/media/13mPE0os7OBQN2/giphy.gif" },
-            { text: "لا تتوقفي عن المحاولة، أنتِ تملكين من القوة والشغف ما يكفي لتحقيق أكبر أحلامك. افتخري بنفسك دايماً!", img: "https://media.giphy.com/media/26BRv0ThflsHCqDrG/giphy.gif" },
-            { text: "ابتسامتك هي النور الذي يضيء أوقاتي المظلمة. ثقي بنفسك وبقدراتك دائماً لأنك تستحقين الأفضل دائماً.", img: "https://media.giphy.com/media/107l_86KlxciVG/giphy.gif" },
-            { text: "أنتِ قادرة على تحويل أي تحدٍ إلى نجاح باهر بفضل إصرارك وعزيمتك التي لا تلين.", img: "https://media.giphy.com/media/14wvvT4MkJ1I1a/giphy.gif" },
-            { text: "كل خطوة صغيرة تخطينها اليوم هي خطوة كبيرة نحو مستقبلك المشرق الذي تنتظرينه.", img: "https://media.giphy.com/media/3oKIPnAiaMCws8nOsE/giphy.gif" },
-            { text: "يا أجمل من دخل حياتي، أتمنى لكِ يوماً مليئاً بالنجاح والتوفيق واللحظات السعيدة!", img: "https://media.giphy.com/media/10HvVHE5p0n5X2/giphy.gif" },
-            { text: "لا تقارني نفسك بأحد، فأنتِ فريدة من نوعك ولا يوجد في هذا العالم من يشبه روعتك ونقاء قلبك.", img: "https://media.giphy.com/media/3o7TKSjRrfIPjeiOkM/giphy.gif" },
-            { text: "تذكري دائماً أن روحك النقية وطيبتك هما سر جاذبيتك وقوتك الحقيقية. لا تتغيري أبداً!", img: "https://media.giphy.com/media/l4FGuhL4U2WyjdkaY/giphy.gif" },
-            { text: "في كل مرة أراكِ فيها تحاولين وتنجحين، يزداد فخري بكِ. أنتِ بحق بطلة قصتك الخاصة.", img: "https://media.giphy.com/media/xT9IgusjhuL0y8jjHO/giphy.gif" },
-            { text: "النجاح يليق بكِ جداً، فلا ترضي بأقل مما تستحقين. واصلي الطموح والسعي وستصلين قريباً لكل ما تطمحين إليه.", img: "https://media.giphy.com/media/3o7abKhOpu0NwenH3O/giphy.gif" },
-            { text: "عندما تصبح الأيام ثقيلة، تذكري أن لديكِ من يحبك ويدعمك بكل جوارحه لتبقي دائماً في القمة.", img: "https://media.giphy.com/media/3o7btPCcdNniyf0ArS/giphy.gif" },
-            { text: "أنتِ أصل وفصل للجمال والذكاء معاً. خلي ثقتك بنفسك عالية زي السماء ولا تهتزي لأي شيء.", img: "https://media.giphy.com/media/3o7qDEq2bMbcbPRQ2c/giphy.gif" },
-            { text: "كل يوم هو فرصة جديدة لتكوني أفضل، وأنا واثق أنكِ تصنعين العجائب ببساطتك وذكائك العبقري.", img: "https://media.giphy.com/media/l0HlRnAWXxn0MhOBK/giphy.gif" },
-            { text: "لا تدعي الخوف يمنعكِ من التجربة، فأنتِ تحملين في داخلك شجاعة تصنع المعجزات وتفتح الأبواب المغلقة.", img: "https://media.giphy.com/media/3ohs7JG6nzYnEDFPOM/giphy.gif" },
-            { text: "أنتِ النجمة التي تضيء كل مكان تحلين فيه، اسطعي ولا تدعي أحداً يطفئ بريقك المميز.", img: "https://media.giphy.com/media/26AHONQ79FdWZhAI0/giphy.gif" },
-            { text: "مهما كانت المسافات أو الظروف، يبقى وجودك هو الشيء الأجمل الذي أشكُر الله عليه كل يوم.", img: "https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif" },
-            { text: "ثقتك بنفسك هي أول طريق للوصول لكل ما تحلمين به، وأنا دايماً في ضهرك ومش هسيبك أبداً.", img: "https://media.giphy.com/media/10JhviFuU2gWIw/giphy.gif" },
-            { text: "أنتِ أمل يتحقق، وحلم يعيش، وشخص لا يتكرر في هذا العالم مرتين. دمتِ لي شيئاً جميلاً لا ينتهي.", img: "https://media.giphy.com/media/d2W7eZX5z62ziqdi/giphy.gif" },
-            { text: "كل صباح يبدأ برؤية ابتسامتك أو سماع صوتك هو صباح مليء بالخير والبركة والجمال.", img: "https://media.giphy.com/media/xT5LMGfHz0hvDUyb1C/giphy.gif" },
-            { text: "استمري في التعلم والتطور، فأنتِ تمتلكين عقلاً منيرأ وقلباً يفيض بالحب والإنسانية.", img: "https://media.giphy.com/media/l0HlP2ms0eUc5nsFG/giphy.gif" },
-            { text: "مهما بدت الطرق متعبة، تذكري اللحظة التي ستصلين فيها لقمة نجاحك واصمدي كعادتك بقوة وشجاعة.", img: "https://media.giphy.com/media/3oEjI1erPMTMBFmNHi/giphy.gif" },
-            { text: "أنتِ مصدر إلهام وشغف لكل من حولك، ووجودك يبعث على الراحة والاطمئنان دائماً في كل الأوقات.", img: "https://media.giphy.com/media/3o7aTskHEU7CQAXE8w/giphy.gif" },
-            { text: "عيناكِ تحملان حكايات من الأمل والجمال، فلا تدعي الحزن يجد لهما طريقاً أبداً.", img: "https://media.giphy.com/media/3o6ZtaO9BZHcOjmErm/giphy.gif" },
-            { text: "أنتِ أقوى من كل العواصف التي مرت بكِ، وستظلين دايماً القوية الشجاعة التي تتجاوز الصعاب بكل إصرار.", img: "https://media.giphy.com/media/3o7buik7UsjGcrDO9a/giphy.gif" },
-            { text: "اعلمي أن كل حلم يتسلل إلى قلبكِ هو حلم من حقكِ أن تحاربين لأجله وستحققينه قريباً جداً.", img: "https://media.giphy.com/media/26u4v3588M5fwUSty/giphy.gif" },
-            { text: "كوني كما أنتِ، بعفويتك وضحكتك وقوتك، فهكذا تكونين الأجمل دائماً في عيون الجميع.", img: "https://media.giphy.com/media/l0HlP2ms0eUc5nsFG/giphy.gif" },
-            { text: "لا تنظري للخلف أبداً، فالمستقبل يحمل لكِ من المفاجآت السعيدة ما يفوق خيالك الواسع.", img: "https://media.giphy.com/media/3ohs7JG6nzYnEDFPOM/giphy.gif" },
-            { text: "أنتِ الجمال في أنقى صوره، والذكاء في أبهى مظاهره. دمتِ ممتازة ومبهرة في كل ما تفعلينه!", img: "https://media.giphy.com/media/xT5LMGfHz0hvDUyb1C/giphy.gif" },
-            { text: "أنا هنا دائماً لأذكركِ بمدى روعتك وقوتك عندما تنسين ذلك تحت ضغط ومتاعب الحياة اليومية.", img: "https://media.giphy.com/media/d2W7eZX5z62ziqdi/giphy.gif" },
-            { text: "اجعلي حلمك كبيراً وواصلي المسير، فالقمة لا تنتظر إلا المتميزين والشجعان أمثالك.", img: "https://media.giphy.com/media/l0HlRnAWXxn0MhOBK/giphy.gif" },
-            { text: "تأكدي أنكِ تتركين أثراً طيباً وجميلاً في كل مكان تمشين فيه بفضل روحك الطيبة ونقاء سريرتك.", img: "https://media.giphy.com/media/3o7TKSjRrfIPjeiOkM/giphy.gif" },
-            { text: "أنتِ كالبدر في ليلة تمامه، تضيئين عتمة الأيام وتنشرين الدفء والسلام لمن حولك.", img: "https://media.giphy.com/media/l4FGuhL4U2WyjdkaY/giphy.gif" },
-            { text: "لا تدعي الأيام الباهتة تؤثر على لون روحك المشرق والمبهج الذي ينشر السعادة أينما حللتِ.", img: "https://media.giphy.com/media/3o7abKhOpu0NwenH3O/giphy.gif" },
-            { text: "واصلي العطاء والسعي، فالدنيا تصبح أجمل بكثير بوجود أشخاص أنقياء ومحبي للخير مثلك فيها.", img: "https://media.giphy.com/media/3o7btPCcdNniyf0ArS/giphy.gif" },
-            { text: "أنتِ تستحقين كل السعادة والنجاح والراحة في هذا العالم، ولن أرضى لكِ بأقل من القمة أبداً.", img: "https://media.giphy.com/media/3o7qDEq2bMbcbPRQ2c/giphy.gif" },
-            { text: "مهما كانت الصعاب، فابتسامتكِ الساحرة قادرة على إذابة كل القسوة وجعل كل شيء جميل وممكن.", img: "https://media.giphy.com/media/5xtDarmwsuR9sDRObyU/giphy.gif" },
-            { text: "كل يوم تثبتين لي أنكِ إنسانة استثنائية وعظيمة بكل ما تحمل الكلمة من معنى وصفاء.", img: "https://media.giphy.com/media/3ov9k01Y5IKizNmC7S/giphy.gif" },
-            { text: "طموحكِ هو وقود نجاحك الدائم، حافظي عليه ولا تسمحي لأحد أن يثبط عزيمتك أو يقلل من حماسك.", img: "https://media.giphy.com/media/13mPE0os7OBQN2/giphy.gif" },
-            { text: "أنتِ قصيدة من الأمل، ولحن من السعادة، وشخص يصعب أن نجد له مثيلاً في هذا الزمن.", img: "https://media.giphy.com/media/26BRv0ThflsHCqDrG/giphy.gif" },
-            { text: "تذكري أن الله لا يضعكِ في موقف إلا وهو يعلم أنكِ قادرة على تجاوزه بكل قوة وثبات وجدارة.", img: "https://media.giphy.com/media/107l_86KlxciVG/giphy.gif" },
-            { text: "كوني دايماً فخورة بكل الإنجازات التي حققتها حتى الآن، وما زال المستقبل يحمل لكِ الأفضل بكثير!", img: "https://media.giphy.com/media/14wvvT4MkJ1I1a/giphy.gif" },
-            { text: "أنتِ رزق ونعمة كبيرة في حياتي، وأتمنى لكِ نجاحاً لا ينتهي وسعادة أبدية لا تزول.", img: "https://media.giphy.com/media/3oKIPnAiaMCws8nOsE/giphy.gif" },
-            { text: "مهما حدث، ابقي شامخة، واثقة، ومبتسمة، فأنتِ عنوان الجمال والقوة في آن واحد.", img: "https://media.giphy.com/media/10HvVHE5p0n5X2/giphy.gif" },
-            { text: "يا أجمل من دخل حياتي، أتمنى لكِ دائماً يوماً مليئاً بالنجاح والتوفيق واللحظات السعيدة التي لا تعوض.", img: "https://media.giphy.com/media/3o7TKSjRrfIPjeiOkM/giphy.gif" },
-            { text: "أنتِ قادرة على بناء عالمك الخاص المليء بالنجاحات والأحلام المحققة بثقتك وإرادتك القوية.", img: "https://media.giphy.com/media/l4FGuhL4U2WyjdkaY/giphy.gif" },
-            { text: "لا توجد عقبة تستطيع أن تقف في طريق طموحك، فأنتم تولدون لتصنعوا المستحيل يا بطلتي.", img: "https://media.giphy.com/media/xT9IgusjhuL0y8jjHO/giphy.gif" },
-            { text: "تأكدي أن كل تعب وجهد تبذلينه اليوم سيتحول قريباً إلى فخر كبير يملأ حياتك بالسرور والرضا.", img: "https://media.giphy.com/media/3o7abKhOpu0NwenH3O/giphy.gif" }
+            { text: "عايزك دايماً تفضلي متأكدة أن قوتك وضحكتك هما أجمل حاجة في الدنيا، مهما قابلتي صعاب أنا دايماً جنبك ومؤمن بكي وبأحلامك يا بطلتي!", img: "https://i.ibb.co/gFbMdvQr/d91840555627474c7ff18f4135a2679d.jpg" },
+            { text: "مهما كانت الظروف صعبة، فكري دايماً إنك قادرة تعدي أي حاجة بذكائك وطيبة روحك الجميلة. ربنا ما يحرمنا من وجودك المنور حياتنا.", img: "https://i.ibb.co/h1F0RkXf/414df72da1813f6676fc38c9e4f056a2.jpg" },
+            { text: "وجودك بيخلي للحياة طعم تاني خالص. استمري في التميز والنجاح، وأنا دايماً فخور بكي وبكل خطوة بتخطوها.", img: "https://i.ibb.co/q3yxW7YW/5f6c802f063501f2bd6b0b9ccc40d34e.jpg" },
+            { text: "رسالة لكي لوحدك: أنتِ إنسانة مميزة جداً، قلبي بيطمئن بكلمتك، وضحكتك بتغير مزاجي كله. خليكي دايماً متفائلة ومشرقة!", img: "https://i.ibb.co/fdMJRskn/ef9a8c6a86f43399805ba6c4b4842a1f.jpg" },
+            { text: "لا تتوقفي عن المحاولة، أنتِ تملكين من القوة والشغف ما يكفي لتحقيق أكبر أحلامك. افتخري بنفسك دايماً!", img: "https://i.ibb.co/3mrw8xr6/a61262a2409a03cb9aa3cd2a14a3403c.jpg" },
+            { text: "ابتسامتك هي النور الذي يضيء أوقاتي المظلمة. ثقي بنفسك وبقدراتك دائماً لأنك تستحقين الأفضل دائماً.", img: "https://i.ibb.co/dw0QZK6V/579f1f975793dc6cf1100630c6415281.jpg" },
+            { text: "أنتِ قادرة على تحويل أي تحدٍ إلى نجاح باهر بفضل إصرارك وعزيمتك التي لا تلين.", img: "https://i.ibb.co/DH4MZ4D5/0774e46816c612d3301019f1fbc1edb2.jpg" },
+            { text: "كل خطوة صغيرة تخطينها اليوم هي خطوة كبيرة نحو مستقبلك المشرق الذي تنتظرينه.", img: "https://i.ibb.co/SDCPFgYb/bf10b1ce69da48b1b93db79df4325a55.jpg" },
+            { text: "يا أجمل من دخل حياتي، أتمنى لكِ يوماً مليئاً بالنجاح والتوفيق واللحظات السعيدة!", img: "https://i.ibb.co/S4MqjLzQ/16a0ed50df062cffb748dfacbb0d4d95.jpg" },
+            { text: "لا تقارني نفسك بأحد، فأنتِ فريدة من نوعك ولا يوجد في هذا العالم من يشبه روعتك ونقاء قلبك.", img: "https://i.ibb.co/k27Y3FQk/ed69ea62111a4167212b70d243819f50.jpg" },
+            { text: "تذكري دائماً أن روحك النقية وطيبتك هما سر جاذبيتك وقوتك الحقيقية. لا تتغيري أبداً!", img: "https://i.ibb.co/ccdwzNDh/9cc7dd2ee1ab8512348ea18770a16135.jpg" },
+            { text: "في كل مرة أراكِ فيها تحاولين وتنجحين، يزداد فخري بكِ. أنتِ بحق بطلة قصتك الخاصة.", img: "https://i.ibb.co/rfF0SG9V/bb3eaed45ec538957bc12b01162b085f.jpg" },
+            { text: "النجاح يليق بكِ جداً، فلا ترضي بأقل مما تستحقين. واصلي الطموح والسعي وستصلين قريباً لكل ما تطمحين إليه.", img: "https://i.ibb.co/qFFfLCVX/4292553b36696be5ace3e52c09d8fbd5.jpg" },
+            { text: "عندما تصبح الأيام ثقيلة، تذكري أن لديكِ من يحبك ويدعمك بكل جوارحه لتبقي دائماً في القمة.", img: "https://i.ibb.co/dwfXLrWQ/110c9f86890e3297fcd0603226b6b650.jpg" },
+            { text: "أنتِ أصل وفصل للجمال والذكاء معاً. خلي ثقتك بنفسك عالية زي السماء ولا تهتزي لأي شيء.", img: "https://i.ibb.co/rGJQ5tFp/23085b3ca91b74cc67609b7674338a20.jpg" },
+            { text: "كل يوم هو فرصة جديدة لتكوني أفضل، وأنا واثق أنكِ تصنعين العجائب ببساطتك وذكائك العبقري.", img: "https://i.ibb.co/HLRtv2gQ/eb9df1a1118bb6382d4de9ab0713b95d.jpg" },
+            { text: "لا تدعي الخوف يمنعكِ من التجربة، فأنتِ تحملين في داخلك شجاعة تصنع المعجزات وتفتح الأبواب المغلقة.", img: "https://i.ibb.co/357gC7HG/759c9fd70c95ffc5218784b2e0d9ace8.jpg" },
+            { text: "أنتِ النجمة التي تضيء كل مكان تحلين فيه، اسطعي ولا تدعي أحداً يطفئ بريقك المميز.", img: "https://i.ibb.co/yLDKtjK/da3c627559b0c7080c30df433ba36ca5.jpg" },
+            { text: "مهما كانت المسافات أو الظروف، يبقى وجودك هو الشيء الأجمل الذي أشكُر الله عليه كل يوم.", img: "https://i.ibb.co/mVztHdrc/580b81e68c93476640e39e18e9a168d9.jpg" },
+            { text: "ثقتك بنفسك هي أول طريق للوصول لكل ما تحلمين به، وأنا دايماً في ضهرك ومش هسيبك أبداً.", img: "https://i.ibb.co/wrN7P6v5/9672e8b2c2ff9e232ff346b203efad53.jpg" },
+            { text: "أنتِ أمل يتحقق، وحلم يعيش، وشخص لا يتكرر في هذا العالم مرتين. دمتِ لي شيئاً جميلاً لا ينتهي.", img: "https://i.ibb.co/RWNRBMf/598d210ae23d9f1c219c2e5e1f1e22d4.jpg" },
+            { text: "كل صباح يبدأ برؤية ابتسامتك أو سماع صوتك هو صباح مليء بالخير والبركة والجمال.", img: "https://i.ibb.co/V0hG79Bj/bc688ff33f89cbfe7481407c8f5582fa.jpg" },
+            { text: "استمري في التعلم والتطور، فأنتِ تمتلكين عقلاً منيرأ وقلباً يفيض بالحب والإنسانية.", img: "https://i.ibb.co/B5SRVKfm/3dce98ce718c18aa290cc385876afdb0.jpg" },
+            { text: "مهما بدت الطرق متعبة، تذكري اللحظة التي ستصلين فيها لقمة نجاحك واصمدي كعادتك بقوة وشجاعة.", img: "https://i.ibb.co/ksScpgx8/7f576c556b367cad8df6a22c35387338.jpg" },
+            { text: "أنتِ مصدر إلهام وشغف لكل من حولك، ووجودك يبعث على الراحة والاطمئنان دائماً في كل الأوقات.", img: "https://i.ibb.co/ZZhYyDN/c0c77dc192d0b321b519f7b44996722d.jpg" },
+            { text: "عيناكِ تحملان حكايات من الأمل والجمال، فلا تدعي الحزن يجد لهما طريقاً أبداً.", img: "https://i.ibb.co/XZ9VwnJW/2e4f412e1c6cf2030fa19a60efb74f0d.jpg" },
+            { text: "أنتِ أقوى من كل العواصف التي مرت بكِ، وستظلين دايماً القوية الشجاعة التي تتجاوز الصعاب بكل إصرار.", img: "https://i.ibb.co/bjwRK4kw/6f400cac4bb9c663774920a7dab17f97.jpg" },
+            { text: "اعلمي أن كل حلم يتسلل إلى قلبكِ هو حلم من حقكِ أن تحاربين لأجله وستحققينه قريباً جداً.", img: "https://i.ibb.co/qYxwDbfV/01b01b4fab33425aa5c437084f9de839.jpg" },
+            { text: "كوني كما أنتِ، بعفويتك وضحكتك وقوتك، فهكذا تكونين الأجمل دائماً في عيون الجميع.", img: "https://i.ibb.co/4Z4ktLzq/31cd80ec506e65809861c910b1b01059.jpg" },
+            { text: "لا تنظري للخلف أبداً، فالمستقبل يحمل لكِ من المفاجآت السعيدة ما يفوق خيالك الواسع.", img: "https://i.ibb.co/1YfQ86NL/d418540d6fa9d20a2355f135761ec370.jpg" },
+            { text: "أنتِ الجمال في أنقى صوره، والذكاء في أبهى مظاهره. دمتِ ممتازة ومبهرة في كل ما تفعلينه!", img: "https://i.ibb.co/jZkhwhvd/0142613931a31d4c13ac6490b6ee2a05.jpg" },
+            { text: "أنا هنا دائماً لأذكركِ بمدى روعتك وقوتك عندما تنسين ذلك تحت ضغط ومتاعب الحياة اليومية.", img: "https://i.ibb.co/PzDDRxBW/6b8ab26818df5135a229b0d55ae2854d.jpg" },
+            { text: "اجعلي حلمك كبيراً وواصلي المسير، فالقمة لا تنتظر إلا المتميزين والشجعان أمثالك.", img: "https://i.ibb.co/G3582nLr/eabc48737453d019d190caa189defaf3.jpg" },
+            { text: "تأكدي أنكِ تتركين أثراً طيباً وجميلاً في كل مكان تمشين فيه بفضل روحك الطيبة ونقاء سريرتك.", img: "https://i.ibb.co/Ndp5Hngb/16ca9369236da913cbdb7dd246e6698b.jpg" },
+            { text: "أنتِ كالبدر في ليلة تمامه، تضيئين عتمة الأيام وتنشرين الدفء والسلام لمن حولك.", img: "https://i.ibb.co/VpYQV6fY/039c7831bcd897fd34e07e62575ab561.jpg" },
+            { text: "لا تدعي الأيام الباهتة تؤثر على لون روحك المشرق والمبهج الذي ينشر السعادة أينما حللتِ.", img: "https://i.ibb.co/DHQ8gjnQ/a2ea6445ea2ae14f36bc800597ca01ab.jpg" },
+            { text: "واصلي العطاء والسعي، فالدنيا تصبح أجمل بكثير بوجود أشخاص أنقياء ومحبي للخير مثلك فيها.", img: "https://i.ibb.co/gFbMdvQr/d91840555627474c7ff18f4135a2679d.jpg" },
+            { text: "أنتِ تستحقين كل السعادة والنجاح والراحة في هذا العالم، ولن أرضى لكِ بأقل من القمة أبداً.", img: "https://i.ibb.co/h1F0RkXf/414df72da1813f6676fc38c9e4f056a2.jpg" },
+            { text: "مهما كانت الصعاب، فابتسامتكِ الساحرة قادرة على إذابة كل القسوة وجعل كل شيء جميل وممكن.", img: "https://i.ibb.co/q3yxW7YW/5f6c802f063501f2bd6b0b9ccc40d34e.jpg" },
+            { text: "كل يوم تثبتين لي أنكِ إنسانة استثنائية وعظيمة بكل ما تحمل الكلمة من معنى وصفاء.", img: "https://i.ibb.co/fdMJRskn/ef9a8c6a86f43399805ba6c4b4842a1f.jpg" },
+            { text: "طموحكِ هو وقود نجاحك الدائم، حافظي عليه ولا تسمحي لأحد أن يثبط عزيمتك أو يقلل من حماسك.", img: "https://i.ibb.co/3mrw8xr6/a61262a2409a03cb9aa3cd2a14a3403c.jpg" },
+            { text: "أنتِ قصيدة من الأمل، ولحن من السعادة، وشخص يصعب أن نجد له مثيلاً في هذا الزمن.", img: "https://i.ibb.co/dw0QZK6V/579f1f975793dc6cf1100630c6415281.jpg" },
+            { text: "تذكري أن الله لا يضعكِ في موقف إلا وهو يعلم أنكِ قادرة على تجاوزه بكل قوة وثبات وجدارة.", img: "https://i.ibb.co/DH4MZ4D5/0774e46816c612d3301019f1fbc1edb2.jpg" },
+            { text: "كوني دايماً فخورة بكل الإنجازات التي حققتها حتى الآن، وما زال المستقبل يحمل لكِ الأفضل بكثير!", img: "https://i.ibb.co/SDCPFgYb/bf10b1ce69da48b1b93db79df4325a55.jpg" },
+            { text: "أنتِ رزق ونعمة كبيرة في حياتي، وأتمنى لكِ نجاحاً لا ينتهي وسعادة أبدية لا تزول.", img: "https://i.ibb.co/S4MqjLzQ/16a0ed50df062cffb748dfacbb0d4d95.jpg" },
+            { text: "مهما حدث، ابقي شامخة، واثقة، ومبتسمة، فأنتِ عنوان الجمال والقوة في آن واحد.", img: "https://i.ibb.co/k27Y3FQk/ed69ea62111a4167212b70d243819f50.jpg" },
+            { text: "يا أجمل من دخل حياتي، أتمنى لكِ دائماً يوماً مليئاً بالنجاح والتوفيق واللحظات السعيدة التي لا تعوض.", img: "https://i.ibb.co/ccdwzNDh/9cc7dd2ee1ab8512348ea18770a16135.jpg" },
+            { text: "أنتِ قادرة على بناء عالمك الخاص المليء بالنجاحات والأحلام المحققة بثقتك وإرادتك القوية.", img: "https://i.ibb.co/rfF0SG9V/bb3eaed45ec538957bc12b01162b085f.jpg" },
+            { text: "لا توجد عقبة تستطيع أن تقف في طريق طموحك، فأنتم تولدون لتصنعوا المستحيل يا بطلتي.", img: "https://i.ibb.co/qFFfLCVX/4292553b36696be5ace3e52c09d8fbd5.jpg" },
+            { text: "تأكدي أن كل تعب وجهد تبذلينه اليوم سيتحول قريباً إلى فخر كبير يملأ حياتك بالسرور والرضا.", img: "https://i.ibb.co/dwfXLrWQ/110c9f86890e3297fcd0603226b6b650.jpg" }
         ];
 
         function startSurprise() {
@@ -197,7 +198,7 @@
                 }
             }, 45);
 
-            // 10 ثوانٍ كاملة للأكواد
+            // 10 ثوانٍ كاملة للأكواد ثم إظهار زر الانتقال
             setTimeout(() => {
                 clearInterval(matrixInterval);
                 document.getElementById('greetingText').innerText = `جاهزة يا ${currentUserName}؟ ✨`;
